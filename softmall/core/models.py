@@ -29,7 +29,7 @@ class Companies(models.Model):
     class Meta:
         managed = True
         db_table = 'companies'
-        db_table_comment = '╥рсышЎр ё ъюьярэш ьш'
+        db_table_comment = 'Таблица с компаниями'
         verbose_name = "Компания"
         verbose_name_plural = "Компании"
 
@@ -43,7 +43,7 @@ class CompanyProperties(models.Model):
     class Meta:
         managed = True
         db_table = 'company_properties'
-        db_table_comment = '╥рсышЎр ётющёЄт ъюьярэшщ'
+        db_table_comment = 'Таблица свойств компаний'
 
 
 class Departments(models.Model):
@@ -56,7 +56,7 @@ class Departments(models.Model):
     class Meta:
         managed = True
         db_table = 'departments'
-        db_table_comment = '╥рсышЎр ё яюфЁрчфыхэшщ'
+        db_table_comment = 'Таблица с подраздлений'
 
 
 class FunctionsDict(models.Model):
@@ -67,7 +67,7 @@ class FunctionsDict(models.Model):
     class Meta:
         managed = True
         db_table = 'functions_dict'
-        db_table_comment = '╥рсышЎр ёяЁртюўэшъ Ёюыхт√ї ЇєэъЎшщ'
+        db_table_comment = 'Таблица справочник ролевых функций'
 
 
 class License(models.Model):
@@ -80,7 +80,7 @@ class License(models.Model):
     class Meta:
         managed = True
         db_table = 'license'
-        db_table_comment = '╥рсышЎр ё ышЎхэчш ьш'
+        db_table_comment = 'Таблица с лицензиями'
 
 
 class ModuleCompanyLinks(models.Model):
@@ -94,7 +94,7 @@ class ModuleCompanyLinks(models.Model):
     class Meta:
         managed = True
         db_table = 'module_company_links'
-        db_table_comment = '╥рсышЎр ёт чхщ ьюфєыхщ ш ъюьярэшщ'
+        db_table_comment = 'Таблица связей модулей и компаний'
 
 
 class Modules(models.Model):
@@ -105,7 +105,7 @@ class Modules(models.Model):
     class Meta:
         managed = True
         db_table = 'modules'
-        db_table_comment = '╥рсышЎр фюяюыэшЄхы№э√ї ьюфєыхщ'
+        db_table_comment = 'Таблица дополнительных модулей'
 
 
 class PropertyCodeDict(models.Model):
@@ -117,7 +117,7 @@ class PropertyCodeDict(models.Model):
     class Meta:
         managed = True
         db_table = 'property_code_dict'
-        db_table_comment = '╥рсышЎр ёяЁртюўэшъ ъюфют фы  ётющёЄт яюы№чютрЄхы \nPROFILE_IMAGE - яєЄ№ фю ърЁЄшэъш ё яЁюЇшыхь яюы№чютрЄхы \nUSER_MOBILE - ЄхыхЇюэ яюы№чютрЄхы \nUSER_NUMVER - шэфш√шфєры№э√щ эюьхЁ яюы№чютрЄхы '
+        db_table_comment = 'Таблица справочник кодов для свойств пользователя\nPROFILE_IMAGE - путь до картинки с профилем пользователя\nUSER_MOBILE - телефон пользователя\nUSER_NUMVER - индиыидуальный номер пользователя'
 
 
 class Reports(models.Model):
@@ -129,7 +129,7 @@ class Reports(models.Model):
     class Meta:
         managed = True
         db_table = 'reports'
-        db_table_comment = '╥рсышЎр ёяЁртюўэшъ юЄўхЄют'
+        db_table_comment = 'Таблица справочник отчетов'
 
 
 class RoleFunctions(models.Model):
@@ -140,7 +140,7 @@ class RoleFunctions(models.Model):
     class Meta:
         managed = True
         db_table = 'role_functions'
-        db_table_comment = '╥рсышЎр ё Ёюыхт√ьш ЇєэъЎш ьш'
+        db_table_comment = 'Таблица с ролевыми функциями'
 
 
 class RolesDict(models.Model):
@@ -151,7 +151,7 @@ class RolesDict(models.Model):
     class Meta:
         managed = True
         db_table = 'roles_dict'
-        db_table_comment = '╥рсышЎр ёяЁртюўэшъ Ёюыхщ яюы№чютрЄхы '
+        db_table_comment = 'Таблица справочник ролей пользователя'
 
 
 class Settings(models.Model):
@@ -164,7 +164,7 @@ class Settings(models.Model):
     class Meta:
         managed = True
         db_table = 'settings'
-        db_table_comment = '╥рсышЎр юс∙шї ётющёЄ'
+        db_table_comment = 'Таблица общих свойст'
 
 
 class SettingsDict(models.Model):
@@ -175,7 +175,7 @@ class SettingsDict(models.Model):
     class Meta:
         managed = True
         db_table = 'settings_dict'
-        db_table_comment = '╥рсышЎр ёяЁртюўэшъ ъюфют ёшёЄхь√'
+        db_table_comment = 'Таблица справочник кодов системы'
 
 
 class ShablonDict(models.Model):
@@ -187,7 +187,7 @@ class ShablonDict(models.Model):
     class Meta:
         managed = True
         db_table = 'shablon_dict'
-        db_table_comment = '╥рсышЎш ёяЁртюўэшъ °рсыюэют'
+        db_table_comment = 'Таблици справочник шаблонов'
 
 
 class StatusDict(models.Model):
@@ -211,7 +211,7 @@ class TimezoneDict(models.Model):
     class Meta:
         managed = True
         db_table = 'timezone_dict'
-        db_table_comment = '╥рсышЎр ё ёяЁртўюэшъ Єрщьчюэ'
+        db_table_comment = 'Таблица с справчоник таймзон'
 
 
 class UserGroups(models.Model):
@@ -226,7 +226,7 @@ class UserGroups(models.Model):
     class Meta:
         managed = True
         db_table = 'user_groups'
-        db_table_comment = '╥рсышЎр уЁєяя яюы№чютрЄхыхщ'
+        db_table_comment = 'Таблица групп пользователей'
 
 
 class UserProperties(models.Model):
@@ -238,7 +238,7 @@ class UserProperties(models.Model):
     class Meta:
         managed = True
         db_table = 'user_properties'
-        db_table_comment = '╥рсышЎр ётющёЄт яюы№чютрЄхыхщ'
+        db_table_comment = 'Таблица свойств пользователей'
 
 
 class UserReportLinks(models.Model):
@@ -252,7 +252,7 @@ class UserReportLinks(models.Model):
     class Meta:
         managed = True
         db_table = 'user_report_links'
-        db_table_comment = '╥рсышЎр ёт чхщ юЄўхЄют ш яюы№чютрЄхыхщ'
+        db_table_comment = 'Таблица связей отчетов и пользователей'
 
 
 class UserRoles(models.Model):
@@ -265,7 +265,7 @@ class UserRoles(models.Model):
     class Meta:
         managed = True
         db_table = 'user_roles'
-        db_table_comment = '╥рсышЎр Ёюыхщ яюы№чютрЄхыхщ'
+        db_table_comment = 'Таблица ролей пользователей'
 
 
 class UserSendings(models.Model):
@@ -278,7 +278,7 @@ class UserSendings(models.Model):
     class Meta:
         managed = True
         db_table = 'user_sendings'
-        db_table_comment = '╥рсышЎр Ёрёё√ыъш ёююс∙хэшщ яю яюы№чютрЄхы ь'
+        db_table_comment = 'Таблица рассылки сообщений по пользователям'
 
 
 class Users(AbstractUser):
@@ -310,4 +310,4 @@ class Users(AbstractUser):
     class Meta:
         managed = True
         db_table = 'users'
-        db_table_comment = '╥рсышЎр яюы№чютрЄхыхщ'
+        db_table_comment = 'Таблица пользователей'
