@@ -1,0 +1,44 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Login</title>-->
+<!--    {% load static %}-->
+<!--    <link rel="stylesheet" href="{% static 'css/styles.css' %}">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--    <form method="post">-->
+<!--        <h2>Login</h2>-->
+<!--        {% csrf_token %}-->
+<!--        {{ form.as_p }}-->
+<!--        <button type="submit">Login</button>-->
+
+<!--        <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>-->
+<!--    </form>-->
+<!--</body>-->
+<!--</html>-->
+<!-- templates/accounts/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+    <form method="post">
+        <h1>Вход</h1>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Войти</button>
+        <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+        <br/><br/>
+        <button onclick="window.location.href='/'">Перейти на главную</button>
+    </form>
+
+</body>
+</html>

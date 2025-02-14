@@ -1,0 +1,42 @@
+[
+  {
+    "timezone_name": "UTC",
+    "timezone": "00:00"
+  },
+  {
+    "timezone_name": "Europe/Moscow",
+    "timezone": "03:00"
+  },
+  {
+    "timezone_name": "America/New_York",
+    "timezone": "-05:00"
+  },
+  {
+    "timezone_name": "Asia/Tokyo",
+    "timezone": "09:00"
+  },
+  {
+    "timezone_name": "Europe/London",
+    "timezone": "00:00"
+  },
+  {
+    "timezone_name": "Australia/Sydney",
+    "timezone": "10:00"
+  },
+  {
+    "timezone_name": "Asia/Kolkata",
+    "timezone": "05:30"
+  },
+  {
+    "timezone_name": "America/Los_Angeles",
+    "timezone": "-08:00"
+  },
+  {
+    "timezone_name": "Europe/Berlin",
+    "timezone": "01:00"
+  },
+  {
+    "timezone_name": "Africa/Cairo",
+    "timezone": "02:00"
+  }
+]
