@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Users, RolesDict, Companies, UserGroups, UserRoles
+from .models import Users, RolesDict, Companies, UserGroups, UserRoles, FunctionsDict
 
 
 class RegisterUserGroupsForm(forms.ModelForm):
@@ -22,7 +22,9 @@ class RegisterRolesDict(forms.ModelForm): # todo
         fields = ['code', 'name']
 
 class RegisterFunctionsDict(forms.ModelForm): # todo
-    pass
+    class Meta:
+        model = FunctionsDict
+        fields = ['code', 'version']
 
 
 class UserRegistrationForm(forms.ModelForm):

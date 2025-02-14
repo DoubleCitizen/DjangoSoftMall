@@ -6,7 +6,8 @@ from django.urls import reverse
 
 from .forms import UserRegistrationForm, UserLoginForm, CompanyRegistrationForm, RegisterUserGroupsForm, \
     RegisterUserRolesGroupsForm, RegisterRolesDict
-from .models import Users
+from .models import Users, RolesDict, FunctionsDict
+
 
 @login_required(redirect_field_name='')
 def register_group(request):
@@ -43,6 +44,24 @@ def register_user_roles(request):
     else:
         form = RegisterRolesDict()
     return render(request, 'user_roles/register.html', {'form': form})
+
+def assign_function_to_role(request):
+    if request.method == 'POST':
+        form = RoleFunctionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('role_function_list')
+    else:
+        form = RoleFunctionForm()
+    return render(request, 'assign_function_to_role.html', {'form': form})
+
+def role_list(request):
+    roles = RolesDict.objects.all()
+    return render(request, 'role_list.html', {'roles': roles})
+
+def function_list(request):
+    functions = FunctionsDict.objects.all()
+    return render(request, 'function_list.html', {'functions': functions})
 
 
 def register(request):
