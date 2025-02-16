@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<form method="post" id="role-form">
+    {% csrf_token %}
+
+    <div class="user-selection">
+        <br/><br/>
+        <label for="id_user">Пользователь:</label>
+        <select name="user" id="id_user" class="form-control">
+            <option value="">-- Выберите пользователя --</option>
+            {% for user in users %}
+                <option value="{{ user.id }}"
+                    {% if selected_user and user.id == selected_user.id %}selected{% endif %}>
+                    {{ user.lastname }} {{ user.firstname }} ({{ user.username }})
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <br/>
+    <div id="current-role" class="current-role mt-3">
+        {% if selected_user %}
+            <strong>Текущая роль:</strong>
+            {{ current_role.name|default:"Роль не назначена" }}
+        {% endif %}
+    </div>
+
+    <div class="role-selection mt-3">
+        <h4>Выберите роль:</h4>
+        <select name="role" id="id_role" class="form-control">
+            <option value="">-- Выберите роль --</option>
+            {% for role in roles %}
+                <option value="{{ role.id }}"
+                    {% if current_role and role.id == current_role.id %}selected{% endif %}>
+                    {{ role.name }} ({{ role.code }})
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary mt-3">Сохранить изменения</button>
+    <br/>
+    <br/>
+    <button type="button" onclick="window.location.href='{% url 'home' %}'">Перейти на главную</button>
+</form>
+
+<!-- Добавляем JavaScript для динамического обновления -->
+<script>
+document.getElementById('id_user').addEventListener('change', function() {
+    const form = document.getElementById('role-form');
+    const params = new URLSearchParams();
+    params.append('user', this.value);
+    window.location.href = window.location.pathname + '?' + params.toString();
+});
+</script>
