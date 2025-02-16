@@ -5,18 +5,18 @@ from datetime import datetime, timedelta, time
 from django.core.management import BaseCommand
 from django.db import migrations
 
-from core.models import TimezoneDict
+from ...models import TimezoneDict
 
 
 class Command(BaseCommand):
     help = 'Fill the database with timezone data'
 
     def handle(self, *args, **options):
+        TimezoneDict.objects.all().delete()
         time_zone_dict = []
-        print(f"os.getcwd() = {os.getcwd()}")
         with open('core/management/commands/time_zones.json', 'r') as file:
             datas = json.loads(file.read())
-        for item  in datas:
+        for item in datas:
             timezone_str = item['timezone']
             # Преобразуем строку временной зоны в timedelta
             if timezone_str.startswith('-'):
@@ -36,7 +36,6 @@ class Command(BaseCommand):
             formatted_time = time(hour=hours, minute=minutes)
 
             item['timezone'] = formatted_time  # Сохраняем time в словаре
-            print(f"item = {item}")
             time_zone_dict.append(TimezoneDict(**item))
         TimezoneDict.objects.bulk_create(time_zone_dict)
 

@@ -11,11 +11,10 @@ from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
-# AbstractUser
 
 class Companies(models.Model):
     id = models.BigAutoField(primary_key=True)
-    property = models.ForeignKey('PropertyCodeDict', models.DO_NOTHING, blank=True, null=True , verbose_name="Свойства")
+    property = models.ForeignKey('PropertyCodeDict', models.DO_NOTHING, blank=True, null=True, verbose_name="Свойства")
     name = models.CharField(max_length=255, verbose_name="Компания")
     created_date = models.DateField(auto_now_add=True, verbose_name="Дата создания")
     inn = models.CharField(max_length=16, verbose_name="ИНН")
@@ -62,7 +61,16 @@ class Departments(models.Model):
 class FunctionsDict(models.Model):
     id = models.SmallAutoField(primary_key=True)
     code = models.CharField(max_length=30)
-    version = models.SmallIntegerField()
+    version = models.SmallIntegerField(default=0)
+
+    def __str__(self):
+        return self.code
+
+    def save(self, *args, **kwargs):
+        # Если запись уже существует, увеличиваем version на 1
+        if self.pk:
+            self.version += 1
+        super().save(*args, **kwargs)
 
     class Meta:
         managed = True
@@ -98,7 +106,7 @@ class ModuleCompanyLinks(models.Model):
 
 
 class Modules(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     code = models.CharField(max_length=30)
     name = models.CharField(max_length=60)
 
@@ -121,7 +129,7 @@ class PropertyCodeDict(models.Model):
 
 
 class Reports(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     code = models.CharField(max_length=30)
     name = models.CharField()
     version = models.IntegerField()
@@ -137,6 +145,9 @@ class RoleFunctions(models.Model):
     role = models.ForeignKey('RolesDict', models.DO_NOTHING)
     function_code = models.ForeignKey(FunctionsDict, models.DO_NOTHING)
 
+    def __str__(self):
+        return self.function_code
+
     class Meta:
         managed = True
         db_table = 'role_functions'
@@ -147,6 +158,9 @@ class RolesDict(models.Model):
     id = models.SmallAutoField(primary_key=True)
     code = models.CharField(max_length=30, verbose_name='Код роли', unique=True)
     name = models.CharField(max_length=60, verbose_name='Имя роли', unique=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         managed = True
@@ -179,7 +193,7 @@ class SettingsDict(models.Model):
 
 
 class ShablonDict(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     code = models.CharField(max_length=30)
     name = models.CharField(max_length=255)
     value = models.TextField(blank=True, null=True)
@@ -191,7 +205,7 @@ class ShablonDict(models.Model):
 
 
 class StatusDict(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     code = models.CharField(max_length=16)
     name = models.CharField(max_length=60)
 
@@ -254,13 +268,19 @@ class UserReportLinks(models.Model):
         db_table = 'user_report_links'
         db_table_comment = 'Таблица связей отчетов и пользователей'
 
-
 class UserRoles(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey('Users', models.DO_NOTHING, verbose_name='Пользователь')
     role = models.ForeignKey(RolesDict, models.DO_NOTHING, verbose_name='Роли')
-    active_from = models.DateField()
+    active_from = models.DateField(auto_now=True)
     active_to = models.DateField(blank=True, null=True)
+
+    @classmethod
+    def get_current_roles_dict(cls):
+        return dict(
+            cls.objects.select_related('role')
+            .values_list('user_id', 'role__name')
+        )
 
     class Meta:
         managed = True
@@ -282,17 +302,24 @@ class UserSendings(models.Model):
 
 
 class Users(AbstractUser):
+    # Обнуляем ненужные поля из AbstractUser
+    first_name = None
+    last_name = None
+    email = None
+    date_joined = None
+    is_staff = None
+
     id = models.BigAutoField(primary_key=True)
     company = models.ForeignKey(Companies, models.DO_NOTHING, null=True, blank=True, verbose_name="Компания")
     group = models.ForeignKey(UserGroups, models.DO_NOTHING, null=True, blank=True, verbose_name="Группа")
     timezone = models.ForeignKey(TimezoneDict, models.DO_NOTHING, null=True, blank=True, verbose_name="Часовой пояс")
     username = models.CharField(max_length=60, verbose_name="Логин", unique=True)
-    firtsname = models.CharField(max_length=60, verbose_name="Имя")
+    firstname = models.CharField(max_length=60, verbose_name="Имя")
     lastname = models.CharField(max_length=60, verbose_name="Фамилия")
     patronymic = models.CharField(max_length=60, blank=True, null=True, verbose_name="Отчество")
     created_date = models.DateField(auto_now_add=True, verbose_name="Дата создания")
     user_lock = models.BooleanField(default=False, verbose_name="Блокировка пользователя")
-    # password = models.CharField(max_length=255, verbose_name="Пароль")
+    password = models.CharField(max_length=255, verbose_name="Пароль")
     comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name="Комментарий")
 
     groups = models.ManyToManyField(

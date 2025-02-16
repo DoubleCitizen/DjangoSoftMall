@@ -19,7 +19,7 @@ env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ENV_FILE_PATH = BASE_DIR.parent.joinpath('.env')
+ENV_FILE_PATH = BASE_DIR / '.env'
 environ.Env.read_env(ENV_FILE_PATH)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -31,7 +31,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['37.192.220.26']
 
 
 # Application definition
@@ -44,7 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'api',
     'core',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

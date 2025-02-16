@@ -10,12 +10,12 @@
 <body>
 
     <form method="post">
-        <h2>Регистрация компании</h2>
+        <h2>Регистрация группы</h2>
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Зарегистрировать компанию</button>
+        <button type="submit">Зарегистрировать группу</button>
         <br/><br/>
-        <button onclick="window.location.href='/'">Перейти на главную</button>
+        <button type="button" onclick="window.location.href='{% url 'home' %}'">Перейти на главную</button>
     </form>
 
 </body>
