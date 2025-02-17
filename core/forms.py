@@ -54,8 +54,24 @@ class UserRegistrationForm(forms.ModelForm):
     # Поле для выбора ролей
     roles = forms.ModelChoiceField(  # Изменено на ModelChoiceField
         queryset=RolesDict.objects.all(),
-        widget=forms.RadioSelect,
+        widget=forms.Select,
         label='Установка роли при регистрации (для отладки)',
+        required=False,
+        empty_label=None  # Убираем пустую опцию
+    )
+
+    company = forms.ModelChoiceField(
+        queryset=Companies.objects.all(),
+        widget=forms.Select,
+        label='Компания',
+        required=False,
+        empty_label=None  # Убираем пустую опцию
+    )
+
+    group = forms.ModelChoiceField(
+        queryset=UserGroups.objects.all(),
+        widget=forms.Select,
+        label='Группа',
         required=False,
         empty_label=None  # Убираем пустую опцию
     )
@@ -79,6 +95,11 @@ class UserRegistrationForm(forms.ModelForm):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
         password_confirm = cleaned_data.get("password_confirm")
+        group = cleaned_data.get('group')
+        company = cleaned_data.get('company')
+
+        if group.company != company:
+            raise forms.ValidationError('Выбрана неправильная группа. Пожалуйста, смените группу.')
 
         if password != password_confirm:
             raise forms.ValidationError("Пароли не совпадают!")
@@ -86,6 +107,8 @@ class UserRegistrationForm(forms.ModelForm):
 
     def save(self, commit=True):
         # Сохраняем пользователя
+
+
         user = super().save(commit=False)
         user.password = make_password(self.cleaned_data["password"])
 
@@ -113,5 +136,5 @@ class CompanyRegistrationForm(forms.ModelForm):
 
 
 class UserLoginForm(forms.Form):
-    username = forms.CharField(label='Пароль')
-    password = forms.CharField(widget=forms.PasswordInput, label='Подтверждение пароля')
+    username = forms.CharField(label='Логин')
+    password = forms.CharField(widget=forms.PasswordInput, label='Пароль')

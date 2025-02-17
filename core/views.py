@@ -52,7 +52,7 @@ def create_role(request):
             return redirect("/")
     else:
         form = RoleForm()
-    return render(request, "accounts/register.html", {"form": form})
+    return render(request, "user_roles/register.html", {"form": form})
 
 @login_required(redirect_field_name='')
 @role_required(RolesFunctions.ASSIGN_ROLE)
@@ -106,8 +106,18 @@ def register_user(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])  # Хешируем пароль
+            if user is None:
+                return redirect('/register/')
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user.set_password(password)  # Хешируем пароль
             user.save()
+            user = authenticate(request, username=username, password=password)  # Использование authenticate
+            if user is not None:
+                login(request, user)  # Логин пользователя
+                return redirect('/')  # Перенаправление на главную страницу
+            else:
+                form.add_error(None, 'Неверное имя пользователя или пароль.')  # Общая ошибка
             return redirect('/')  # Перенаправление на страницу входа
     else:
         form = UserRegistrationForm()

@@ -5,12 +5,13 @@ class Command(BaseCommand):
     help = 'Заполнить все таблицы в базе данных, начальными данными'
 
     def handle(self, *args, **options):
+
         commands = [
+            ('start_fill_db_companies', {}),
             ('start_fill_db_timezones', {}),
             ('start_fill_db_roles_functions', {}),
-            ('start_fill_db_companies', {}),
+            ('start_fill_db_groups', {}),
         ]
-
         for command, params in commands:
             self.stdout.write(f'Запуск команды: {command}')
             try:

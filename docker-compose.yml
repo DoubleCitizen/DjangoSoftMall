@@ -1,19 +1,47 @@
 version: "3.9"
 
 services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    env_file:
+      - .env_docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    ports:
+      - "8001:8001"
+
+  migrations:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    env_file:
+      - .env_docker
+    command: >
+      sh -c "python3 manage.py migrate && python3 manage.py start_fill_db"
+
   postgres:
     image: postgres:latest
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    restart: always
+    restart: on-failure
+    expose:
+      - 5432
     ports:
       - 5431:5432
     volumes:
       - ./pg_data:/var/lib/postgresql/data
     env_file:
-      - .env
+      - .env_docker
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
       interval: 5s

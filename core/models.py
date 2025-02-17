@@ -12,6 +12,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 
+
 class Companies(models.Model):
     id = models.BigAutoField(primary_key=True)
     property = models.ForeignKey('PropertyCodeDict', models.DO_NOTHING, blank=True, null=True, verbose_name="Свойства")
@@ -235,7 +236,7 @@ class UserGroups(models.Model):
     comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Комментарий')
 
     def __str__(self):
-        return self.group_name
+        return f"{self.company}: {self.group_name}"
 
     class Meta:
         managed = True
@@ -267,6 +268,7 @@ class UserReportLinks(models.Model):
         managed = True
         db_table = 'user_report_links'
         db_table_comment = 'Таблица связей отчетов и пользователей'
+
 
 class UserRoles(models.Model):
     id = models.AutoField(primary_key=True)
