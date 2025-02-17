@@ -6,12 +6,14 @@ from core.models import Users, RolesDict, Companies, UserGroups, UserRoles, Func
 
 
 class RegisterUserGroupsForm(forms.ModelForm):
+    """Форма для регистрации новых пользовательских групп"""
     class Meta:
         model = UserGroups
         fields = ['company', 'group_name', 'comment']
 
 
 class AssignRoleForm(forms.ModelForm):
+    """Форма для назначения ролей пользователям"""
     current_role = forms.CharField(required=False, widget=forms.HiddenInput())
     user = forms.ModelChoiceField(
         queryset=Users.objects.all(),
@@ -27,6 +29,7 @@ class AssignRoleForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """Инициализация формы с настройкой выбора ролей"""
         super().__init__(*args, **kwargs)
         self.fields['role'].queryset = RolesDict.objects.all()
         self.fields['role'].empty_label = None
@@ -37,6 +40,7 @@ class AssignRoleForm(forms.ModelForm):
 
 
 class RoleForm(forms.ModelForm):
+    """Форма для создания и редактирования ролей"""
     functions = forms.ModelMultipleChoiceField(
         queryset=FunctionsDict.objects.all(),
         widget=forms.CheckboxSelectMultiple,
@@ -48,6 +52,7 @@ class RoleForm(forms.ModelForm):
 
 
 class UserRegistrationForm(forms.ModelForm):
+    """Форма регистрации новых пользователей с расширенной функциональностью"""
     password = forms.CharField(widget=forms.PasswordInput, label='Пароль')
     password_confirm = forms.CharField(widget=forms.PasswordInput, label='Подтверждение пароля')
 
@@ -84,6 +89,7 @@ class UserRegistrationForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
+        """Настройка обязательности полей при инициализации"""
         super().__init__(*args, **kwargs)
         # Делаем поля необязательными
         self.fields['company'].required = False
@@ -92,6 +98,7 @@ class UserRegistrationForm(forms.ModelForm):
         self.fields['patronymic'].required = False
 
     def clean(self):
+        """Валидация данных формы"""
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
         password_confirm = cleaned_data.get("password_confirm")
@@ -106,9 +113,7 @@ class UserRegistrationForm(forms.ModelForm):
         return cleaned_data
 
     def save(self, commit=True):
-        # Сохраняем пользователя
-
-
+        """Сохранение пользователя с дополнительной логикой"""
         user = super().save(commit=False)
         user.password = make_password(self.cleaned_data["password"])
 
@@ -129,11 +134,13 @@ class UserRegistrationForm(forms.ModelForm):
 
 
 class CompanyRegistrationForm(forms.ModelForm):
+    """Форма регистрации новых компаний"""
     class Meta:
         model = Companies
         fields = ['property', 'name', 'inn', 'kpp', 'ogrn', 'bic']
 
 
 class UserLoginForm(forms.Form):
+    """Форма авторизации пользователей"""
     username = forms.CharField(label='Логин')
     password = forms.CharField(widget=forms.PasswordInput, label='Пароль')

@@ -15,8 +15,7 @@ class Command(BaseCommand):
             datas = json.loads(file.read())
 
         companies_data = []
-        first_entry, second_entry = Companies.objects.all()[0:2]  # Получаем первую запись
-        # second_entry = Companies.objects.all()[0]  # Получаем первую запись
+        first_entry, second_entry = Companies.objects.all()[0:2]
         count_datas = len(datas)
         for i, data in enumerate(datas):
             if count_datas // 2 > i:

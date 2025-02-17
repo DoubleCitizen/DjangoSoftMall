@@ -14,6 +14,11 @@ from core.permission import role_required
 @login_required(redirect_field_name='')
 @role_required(RolesFunctions.REGISTER_GROUP)  # Затем проверка роли
 def register_group(request):
+    """
+    Обрабатывает регистрацию новой группы.
+    Если метод запроса POST, проверяет и сохраняет данные формы.
+    В противном случае отображает пустую форму.
+    """
     if request.method == 'POST':
         form = RegisterUserGroupsForm(request.POST)
         if form.is_valid():
@@ -28,6 +33,11 @@ def register_group(request):
 @login_required(redirect_field_name='')
 @role_required(RolesFunctions.REGISTER_COMPANY)
 def register_company(request):
+    """
+    Обрабатывает регистрацию новой компании.
+    Если метод запроса POST, проверяет и сохраняет данные формы.
+    В противном случае отображает пустую форму.
+    """
     if request.method == 'POST':
         form = CompanyRegistrationForm(request.POST)
         if form.is_valid():
@@ -42,6 +52,11 @@ def register_company(request):
 @login_required(redirect_field_name='')
 @role_required(RolesFunctions.CREATE_ROLE)
 def create_role(request):
+    """
+    Обрабатывает создание новой роли.
+    Если метод запроса POST, проверяет и сохраняет данные формы, включая функции, связанные с ролью.
+    В противном случае отображает пустую форму.
+    """
     if request.method == "POST":
         form = RoleForm(request.POST)
         if form.is_valid():
@@ -57,7 +72,12 @@ def create_role(request):
 @login_required(redirect_field_name='')
 @role_required(RolesFunctions.ASSIGN_ROLE)
 def assign_role(request):
-    # Оптимизированные запросы с предварительной выборкой
+    """
+    Обрабатывает назначение ролей пользователям.
+    Если метод запроса POST, обновляет или создает запись о роли для выбранного пользователя.
+    В противном случае отображает список пользователей и доступные роли.
+    """
+
     users = Users.objects.order_by('lastname', 'firstname')
     roles = RolesDict.objects.all()
     selected_user = Users.objects.first()
@@ -102,6 +122,11 @@ def assign_role(request):
 
 
 def register_user(request):
+    """
+    Обрабатывает регистрацию нового пользователя.
+    Если метод запроса POST, проверяет и сохраняет данные формы, а затем аутентифицирует пользователя.
+    В противном случае отображает пустую форму.
+    """
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -125,6 +150,11 @@ def register_user(request):
 
 
 def login_user(request):
+    """
+    Обрабатывает вход пользователя в систему.
+    Если метод запроса POST, проверяет и аутентифицирует пользователя.
+    В противном случае отображает форму для входа.
+    """
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
@@ -142,10 +172,17 @@ def login_user(request):
 
 
 def logout_user(request):
+    """
+    Обрабатывает выход пользователя из системы.
+    Перенаправляет на страницу входа после выхода.
+    """
     logout(request)  # Выход из системы
     return redirect('login')  # Перенаправление на страницу входа
 
 
 @login_required(redirect_field_name='')
 def home_view(request):
+    """
+    Отображает главную страницу для аутентифицированных пользователей.
+    """
     return render(request, 'home/home.html')
