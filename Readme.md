@@ -38,7 +38,7 @@
 
 1. Клонировать репозиторий:
 ```bash
-git clone https://github.com/ваш-username/DjangoSoftMall.git
+git clone https://github.com/DoubleCitizen/DjangoSoftMall.git
 cd DjangoSoftMall
 ```
 2. Создать .env_docker файл:
