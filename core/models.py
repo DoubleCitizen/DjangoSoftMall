@@ -247,8 +247,8 @@ class RolesDict(models.Model):
         db_table = 'roles_dict'
         db_table_comment = 'Таблица справочник ролей пользователя'
         indexes = [
-            models.Index(fields=['code'], name='idx_roles_dict_code'),  # Явный индекс для code
-            models.Index(fields=['name'], name='idx_roles_dict_name'),  # Явный индекс для name
+            models.Index(fields=['code'], name='idx_roles_dict_code'),
+            models.Index(fields=['name'], name='idx_roles_dict_name'),
         ]
 
 
@@ -475,13 +475,13 @@ class Users(AbstractUser):
 
     groups = models.ManyToManyField(
         Group,
-        related_name='custom_user_set',  # Указываем уникальное имя для обратной ссылки
+        related_name='custom_user_set',
         blank=True,
     )
 
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='custom_user_permissions_set',  # Указываем уникальное имя для обратной ссылки
+        related_name='custom_user_permissions_set',
         blank=True,
     )
 
