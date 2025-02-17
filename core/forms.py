@@ -112,7 +112,6 @@ class UserRegistrationForm(forms.ModelForm):
         user = super().save(commit=False)
         user.password = make_password(self.cleaned_data["password"])
 
-        # if commit:
         user.save()
 
         # Сохраняем выбранные роли через модель UserRoles

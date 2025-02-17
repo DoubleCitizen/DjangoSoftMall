@@ -117,5 +117,5 @@ class UserSendingsViewSet(viewsets.ModelViewSet):
 class UsersViewSet(viewsets.ModelViewSet):
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
-    permission_classes = [PermissionClasses.permission_classes.get(RolesFunctionsViewSet.USERS_VIEW_SET.value)]
+    # permission_classes = [PermissionClasses.permission_classes.get(RolesFunctionsViewSet.USERS_VIEW_SET.value)]
 

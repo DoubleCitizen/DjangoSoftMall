@@ -60,8 +60,8 @@ def assign_role(request):
     # Оптимизированные запросы с предварительной выборкой
     users = Users.objects.order_by('lastname', 'firstname')
     roles = RolesDict.objects.all()
-    selected_user = None
-    current_role = None
+    selected_user = Users.objects.first()
+    current_role = UserRoles.objects.get(user=selected_user).role
 
     if request.method == "POST":
         user_id = request.POST.get('user')

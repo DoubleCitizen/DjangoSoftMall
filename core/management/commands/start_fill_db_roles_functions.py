@@ -12,10 +12,10 @@ class Command(BaseCommand):
         FunctionsDict.objects.all().delete()
         RolesDict.objects.all().delete()
         functions_dict_data = []
-        for role in RolesFunctions:
-            functions_dict_data.append(FunctionsDict(code=role.value))
-        for role in RolesFunctionsViewSet:
-            functions_dict_data.append(FunctionsDict(code=role.value))
+        for i, role in enumerate(RolesFunctions):
+            functions_dict_data.append(FunctionsDict(code=role.value, version=str(i + 1)))
+        for i, role in enumerate(RolesFunctionsViewSet):
+            functions_dict_data.append(FunctionsDict(code=role.value, version=str((i + 1) * (-1))))
         FunctionsDict.objects.bulk_create(functions_dict_data)
         RolesDict.objects.create(name="Пользователь", code='1')
         role = RolesDict.objects.create(name="Супер админ", code='2')
