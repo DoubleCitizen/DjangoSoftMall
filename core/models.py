@@ -451,19 +451,6 @@ class UserSendings(models.Model):
             models.Index(fields=['user', 'status'], name='idx_user_sendings_user_status'),
         ]
 
-# class CustomUserManager(BaseUserManager):
-#     def create_user(self, username, password=None):
-#         user = self.model(username=username)
-#         user.set_password(password)
-#         user.save(using=self._db)
-#         return user
-#
-#     def create_superuser(self, username, password=None):
-#         user = self.create_user(username, password)
-#         user.is_admin = True  # Ваше кастомное поле вместо is_staff/is_superuser
-#         user.save(using=self._db)
-#         return user
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
         user = self.model(
@@ -484,9 +471,7 @@ class Users(AbstractUser, PermissionsMixin):
     last_name = None
     email = None
     date_joined = None
-    # is_staff = None
     is_staff = models.BooleanField(default=False)
-    # is_superuser = None
     is_superuser = models.BooleanField(default=False)
     objects = CustomUserManager()
 
@@ -502,18 +487,6 @@ class Users(AbstractUser, PermissionsMixin):
     user_lock = models.BooleanField(default=False, verbose_name="Блокировка пользователя")
     password = models.CharField(max_length=255, verbose_name="Пароль")
     comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name="Комментарий")
-
-    # objects = CustomUserManager()
-    # @staticmethod
-    # def create_user(username, password, firstname, lastname):
-    #     Users.objects.create(
-    #         Users(
-    #             username=username,
-    #             password=password,
-    #             firstname=firstname,
-    #             lastname=lastname,
-    #         )
-    #     )
 
     groups = models.ManyToManyField(
         Group,
