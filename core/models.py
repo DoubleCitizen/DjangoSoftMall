@@ -8,8 +8,8 @@
 from tkinter.font import names
 
 from django.contrib.auth import password_validation
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractUser, Group, Permission, PermissionsMixin
 from django.db import models
 
 
@@ -349,7 +349,7 @@ class UserGroups(models.Model):
     comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name='Комментарий')
 
     def __str__(self):
-        return f"{self.company}: {self.group_name}"
+        return f"{self.company} - {self.group_name}"
 
     class Meta:
         managed = True
@@ -451,14 +451,44 @@ class UserSendings(models.Model):
             models.Index(fields=['user', 'status'], name='idx_user_sendings_user_status'),
         ]
 
+# class CustomUserManager(BaseUserManager):
+#     def create_user(self, username, password=None):
+#         user = self.model(username=username)
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
+#
+#     def create_superuser(self, username, password=None):
+#         user = self.create_user(username, password)
+#         user.is_admin = True  # Ваше кастомное поле вместо is_staff/is_superuser
+#         user.save(using=self._db)
+#         return user
 
-class Users(AbstractUser):
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, password=None, **extra_fields):
+        user = self.model(
+            username=username,
+            firstname=extra_fields.get('firstname', ''),
+            lastname=extra_fields.get('lastname', ''),
+            company=extra_fields.get('company'),
+            group=extra_fields.get('group'),
+            timezone=extra_fields.get('timezone')
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+class Users(AbstractUser, PermissionsMixin):
     # Обнуляем ненужные поля из AbstractUser
     first_name = None
     last_name = None
     email = None
     date_joined = None
-    is_staff = None
+    # is_staff = None
+    is_staff = models.BooleanField(default=False)
+    # is_superuser = None
+    is_superuser = models.BooleanField(default=False)
+    objects = CustomUserManager()
 
     id = models.BigAutoField(primary_key=True)
     company = models.ForeignKey(Companies, models.CASCADE, null=True, blank=True, verbose_name="Компания")
@@ -472,6 +502,18 @@ class Users(AbstractUser):
     user_lock = models.BooleanField(default=False, verbose_name="Блокировка пользователя")
     password = models.CharField(max_length=255, verbose_name="Пароль")
     comment = models.CharField(max_length=1000, blank=True, null=True, verbose_name="Комментарий")
+
+    # objects = CustomUserManager()
+    # @staticmethod
+    # def create_user(username, password, firstname, lastname):
+    #     Users.objects.create(
+    #         Users(
+    #             username=username,
+    #             password=password,
+    #             firstname=firstname,
+    #             lastname=lastname,
+    #         )
+    #     )
 
     groups = models.ManyToManyField(
         Group,
