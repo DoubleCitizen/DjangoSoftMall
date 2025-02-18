@@ -7,6 +7,7 @@ from core.models import Users, RolesDict, Companies, UserGroups, UserRoles, Func
 
 class RegisterUserGroupsForm(forms.ModelForm):
     """Форма для регистрации новых пользовательских групп"""
+
     class Meta:
         model = UserGroups
         fields = ['company', 'group_name', 'comment']
@@ -65,18 +66,10 @@ class UserRegistrationForm(forms.ModelForm):
         empty_label=None  # Убираем пустую опцию
     )
 
-    company = forms.ModelChoiceField(
-        queryset=Companies.objects.all(),
-        widget=forms.Select,
-        label='Компания',
-        required=False,
-        empty_label=None  # Убираем пустую опцию
-    )
-
     group = forms.ModelChoiceField(
         queryset=UserGroups.objects.all(),
         widget=forms.Select,
-        label='Группа',
+        label='Компания - Группа',
         required=False,
         empty_label=None  # Убираем пустую опцию
     )
@@ -85,14 +78,13 @@ class UserRegistrationForm(forms.ModelForm):
         model = Users
         fields = [
             'roles', 'username', 'firstname', 'lastname', 'patronymic',
-            'company', 'group', 'timezone', 'password'
+            'group', 'timezone', 'password'
         ]
 
     def __init__(self, *args, **kwargs):
         """Настройка обязательности полей при инициализации"""
         super().__init__(*args, **kwargs)
         # Делаем поля необязательными
-        self.fields['company'].required = False
         self.fields['group'].required = False
         self.fields['timezone'].required = False
         self.fields['patronymic'].required = False
@@ -103,10 +95,6 @@ class UserRegistrationForm(forms.ModelForm):
         password = cleaned_data.get("password")
         password_confirm = cleaned_data.get("password_confirm")
         group = cleaned_data.get('group')
-        company = cleaned_data.get('company')
-
-        if group.company != company:
-            raise forms.ValidationError('Выбрана неправильная группа. Пожалуйста, смените группу.')
 
         if password != password_confirm:
             raise forms.ValidationError("Пароли не совпадают!")
@@ -114,7 +102,13 @@ class UserRegistrationForm(forms.ModelForm):
 
     def save(self, commit=True):
         """Сохранение пользователя с дополнительной логикой"""
+        group = self.cleaned_data.get('group')
+        if group is not None:
+            company = Companies.objects.get(id=group.company.id)
+
         user = super().save(commit=False)
+        if group is not None:
+            user.company = company
         user.password = make_password(self.cleaned_data["password"])
 
         user.save()
@@ -135,6 +129,7 @@ class UserRegistrationForm(forms.ModelForm):
 
 class CompanyRegistrationForm(forms.ModelForm):
     """Форма регистрации новых компаний"""
+
     class Meta:
         model = Companies
         fields = ['property', 'name', 'inn', 'kpp', 'ogrn', 'bic']
