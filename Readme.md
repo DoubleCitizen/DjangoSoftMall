@@ -29,8 +29,6 @@
 - 🐳 Docker Compose
 - 🧪 pytest для тестирования
 
-[![Django](https://static.djangoproject.com/img/logos/django-logo-negative.png)](https://www.djangoproject.com/)
-
 ## Быстрый старт
 
 ### Требования
