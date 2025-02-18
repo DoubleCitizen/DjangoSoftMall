@@ -40,9 +40,6 @@ class CustomPermission(permissions.BasePermission):
     """
     function_code = None
 
-    # def __init__(self, function_code):
-    #     self.function_code = function_code
-
     def has_permission(self, request, view):
         # Проверяем, что пользователь аутентифицирован
         if not request.user.is_authenticated:
